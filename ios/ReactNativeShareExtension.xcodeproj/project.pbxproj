@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		41B5DE3E1D0B50D300949BD5 /* ReactNativeShareExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 41B5DE3D1D0B50D300949BD5 /* ReactNativeShareExtension.m */; };
+		D3AF82B420D2574700FFD0CC /* DataItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D3AF82B320D2574700FFD0CC /* DataItem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,6 +27,8 @@
 		41B5DE301D0B505800949BD5 /* libReactNativeShareExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libReactNativeShareExtension.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		41B5DE3D1D0B50D300949BD5 /* ReactNativeShareExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReactNativeShareExtension.m; sourceTree = "<group>"; };
 		41B5DE3F1D0B50FA00949BD5 /* ReactNativeShareExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReactNativeShareExtension.h; sourceTree = "<group>"; };
+		D3AF82B220D2574700FFD0CC /* DataItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DataItem.h; sourceTree = "<group>"; };
+		D3AF82B320D2574700FFD0CC /* DataItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DataItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +63,8 @@
 			children = (
 				41B5DE3F1D0B50FA00949BD5 /* ReactNativeShareExtension.h */,
 				41B5DE3D1D0B50D300949BD5 /* ReactNativeShareExtension.m */,
+				D3AF82B220D2574700FFD0CC /* DataItem.h */,
+				D3AF82B320D2574700FFD0CC /* DataItem.m */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -120,6 +125,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3AF82B420D2574700FFD0CC /* DataItem.m in Sources */,
 				41B5DE3E1D0B50D300949BD5 /* ReactNativeShareExtension.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -262,6 +268,7 @@
 				41B5DE3B1D0B505800949BD5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -74,18 +74,25 @@ RCT_REMAP_METHOD(data,
         __block NSItemProvider *imageProvider = nil;
         __block NSItemProvider *textProvider = nil;
 
+        NSMutableArray *providers = [NSMutableArray array];
+        
         [attachments enumerateObjectsUsingBlock:^(NSItemProvider *provider, NSUInteger idx, BOOL *stop) {
             if([provider hasItemConformingToTypeIdentifier:URL_IDENTIFIER]) {
                 urlProvider = provider;
-                *stop = YES;
+                [providers addObject:urlProvider];
             } else if ([provider hasItemConformingToTypeIdentifier:TEXT_IDENTIFIER]){
                 textProvider = provider;
-                *stop = YES;
+                [providers addObject:urlProvider];
             } else if ([provider hasItemConformingToTypeIdentifier:IMAGE_IDENTIFIER]){
                 imageProvider = provider;
-                *stop = YES;
+                [providers addObject:urlProvider];
             }
         }];
+        
+        __block NSInteger loadedItemsCount = 0;
+        NSInteger itemsCount = [providers count];
+        __block NSMutableArray *results = [NSMutableArray array];
+        
 
         if(urlProvider) {
             [urlProvider loadItemForTypeIdentifier:URL_IDENTIFIER options:nil completionHandler:^(id<NSSecureCoding> item, NSError *error) {
