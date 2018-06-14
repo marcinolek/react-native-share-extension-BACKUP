@@ -1,4 +1,5 @@
 #import "ReactNativeShareExtension.h"
+#import "DataItem.h"
 #import "React/RCTRootView.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 
@@ -22,16 +23,16 @@ RCT_EXPORT_MODULE();
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     //object variable for extension doesn't work for react-native. It must be assign to gloabl
     //variable extensionContext. in this way, both exported method can touch extensionContext
     extensionContext = self.extensionContext;
-
+    
     UIView *rootView = [self shareView];
     if (rootView.backgroundColor == nil) {
         rootView.backgroundColor = [[UIColor alloc] initWithRed:1 green:1 blue:1 alpha:0.1];
     }
-
+    
     self.view = rootView;
 }
 
@@ -66,14 +67,28 @@ RCT_REMAP_METHOD(data,
 
 - (void)extractDataFromContext:(NSExtensionContext *)context withCallback:(void(^)(NSString *value, NSString* contentType, NSException *exception))callback {
     
+    
+    void (^processResults)(NSArray *) = ^void(NSArray *results) {
+        for (DataItem *result in results) {
+            NSLog(@"Result %@ Value: %@", result.contentType, result.value);
+        }
+        /* if(callback) {
+         callback([url absoluteString], @"text/plain", nil);
+         } */
+        
+        /* if(callback) {
+         callback(fullPath, [fullPath pathExtension], nil);
+         } */
+    };
+    
     @try {
         NSExtensionItem *item = [context.inputItems firstObject];
         NSArray *attachments = item.attachments;
-
+        
         __block NSItemProvider *urlProvider = nil;
         __block NSItemProvider *imageProvider = nil;
         __block NSItemProvider *textProvider = nil;
-
+        
         NSMutableArray *providers = [NSMutableArray array];
         
         [attachments enumerateObjectsUsingBlock:^(NSItemProvider *provider, NSUInteger idx, BOOL *stop) {
@@ -89,17 +104,18 @@ RCT_REMAP_METHOD(data,
             }
         }];
         
-        __block NSInteger loadedItemsCount = 0;
+        
         NSInteger itemsCount = [providers count];
         __block NSMutableArray *results = [NSMutableArray array];
         
-
+        
         if(urlProvider) {
             [urlProvider loadItemForTypeIdentifier:URL_IDENTIFIER options:nil completionHandler:^(id<NSSecureCoding> item, NSError *error) {
                 NSURL *url = (NSURL *)item;
-
-                if(callback) {
-                    callback([url absoluteString], @"text/plain", nil);
+                DataItem *dataItem = [DataItem itemWithContentType:@"text/plain" value:[url absoluteString] exception:nil];
+                [results addObject:dataItem];
+                if(results.count == itemsCount) {
+                    processResults(results);
                 }
             }];
         } else if (imageProvider) {
@@ -111,7 +127,7 @@ RCT_REMAP_METHOD(data,
                  * sharing from Photos and similar apps gives us a URL
                  * Therefore the solution is to save a UIImage, either way, and return the local path to that temp UIImage
                  * This path will be sent to React Native and can be processed and accessed RN side.
-                **/
+                 **/
                 
                 UIImage *sharedImage;
                 NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"RNSE_TEMP_IMG"];
@@ -127,16 +143,20 @@ RCT_REMAP_METHOD(data,
                 
                 [UIImagePNGRepresentation(sharedImage) writeToFile:fullPath atomically:YES];
                 
-                if(callback) {
-                    callback(fullPath, [fullPath pathExtension], nil);
+                DataItem *dataItem = [DataItem itemWithContentType:[fullPath pathExtension] value:fullPath exception:nil];
+                [results addObject:dataItem];
+                if(results.count == itemsCount) {
+                    processResults(results);
                 }
+                
             }];
         } else if (textProvider) {
             [textProvider loadItemForTypeIdentifier:TEXT_IDENTIFIER options:nil completionHandler:^(id<NSSecureCoding> item, NSError *error) {
                 NSString *text = (NSString *)item;
-
-                if(callback) {
-                    callback(text, @"text/plain", nil);
+                DataItem *dataItem = [DataItem itemWithContentType:@"text/plain" value:text exception:nil];
+                [results addObject:dataItem];
+                if(results.count == itemsCount) {
+                    processResults(results);
                 }
             }];
         } else {
