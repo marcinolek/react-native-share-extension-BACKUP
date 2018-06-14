@@ -70,7 +70,7 @@ RCT_REMAP_METHOD(data,
     
     void (^processResults)(NSArray *) = ^void(NSArray *results) {
         for (DataItem *result in results) {
-            NSLog(@"Result %@ Value: %@", result.contentType, result.value);
+            NSLog(@"Provider Result %@ Value: %@", result.contentType, result.value);
         }
         /* if(callback) {
          callback([url absoluteString], @"text/plain", nil);
