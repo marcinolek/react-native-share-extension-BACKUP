@@ -46,7 +46,7 @@ RCT_EXPORT_METHOD(close) {
 
 RCT_EXPORT_METHOD(openURL:(NSString *)url) {
     UIApplication *application = [UIApplication sharedApplication];
-    NSURL *urlToOpen = [NSURL URLWithString:[url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLFragmentAllowedCharacterSet]]];
+    NSURL *urlToOpen = [NSURL URLWithString:url];
     [application openURL:urlToOpen options:@{} completionHandler: nil];
 }
 
