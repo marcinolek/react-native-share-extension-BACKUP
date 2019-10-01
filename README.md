@@ -1,4 +1,4 @@
-# React Native Share Extension
+# React Native Share Extension - OLD, rm fork
 
 This is a helper module which brings react native as an engine to drive share extension for your app.
 
